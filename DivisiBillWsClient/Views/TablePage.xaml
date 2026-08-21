@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DivisiBillWsClient.Views.TablePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:DivisiBillWsClient.ViewModels"
+    xmlns:conv="clr-namespace:DivisiBillWsClient.Converters"
+    x:DataType="vm:TablePageViewModel"
+    BindingContext="{vm:TablePageViewModel}"
+    Title="Tables">
+
+    <ContentPage.Resources>
+        <conv:EnvironmentToStringConverter x:Key="EnvironmentToString" />
+    </ContentPage.Resources>
+
+    <Grid
+        RowDefinitions="Auto,Auto,Auto,*,Auto, Auto,*,Auto"
+        Padding="10"
+        RowSpacing="10">
+
+        <!--  Environment Selector  -->
+        <Grid
+            Grid.Row="0"
+            ColumnDefinitions="Auto,*"
+            ColumnSpacing="10"
+            VerticalOptions="Center"
+            Margin="0,0,0,10">
+            <Label
+                Text="Data Environment:"
+                VerticalOptions="Center"
+                FontAttributes="Bold" />
+            <Picker
+                x:Name="EnvironmentPicker"
+                Grid.Column="1"
+                ItemsSource="{Binding EnvironmentOptions}"
+                SelectedItem="{Binding SelectedEnvironment, Converter={StaticResource EnvironmentToString}}"
+                HorizontalOptions="Fill" />
+        </Grid>
+
+        <!--  Meal Load Button  -->
+        <Button
+            Grid.Row="1"
+            Text="Load Meal Data"
+            HorizontalOptions="Start"
+            Command="{Binding LoadMealDataCommand}"
+            IsEnabled="{Binding IsBusy, Converter={StaticResource Not}}"
+            Padding="15,8" />
+
+        <!--  Meal Table Header  -->
+        <Grid
+            Grid.Row="2"
+            ColumnDefinitions="170, *, 60, 120"
+            ColumnSpacing="5"
+            Padding="10">
+            <Label
+                Text="User ID"
+                FontAttributes="Bold"
+                FontSize="12" />
+            <Label
+                Grid.Column="1"
+                Text="Partition Key"
+                FontAttributes="Bold"
+                FontSize="12" />
+            <Label
+                Grid.Column="2"
+                Text="Count"
+                FontAttributes="Bold"
+                FontSize="12"
+                HorizontalOptions="Center" />
+            <Label
+                Grid.Column="3"
+                Text="Latest Timestamp"
+                FontAttributes="Bold"
+                FontSize="12" />
+        </Grid>
+
+        <!--  Meal CollectionView  -->
+        <CollectionView
+            Grid.Row="3"
+            ItemsSource="{Binding MealItems}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:MealData">
+                    <Border
+                        Padding="10"
+                        Margin="0,5"
+                        Stroke="#e0e0e0"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8">
+                        <Grid ColumnDefinitions="170, *, 60, 120" ColumnSpacing="5">
+                            <Label
+                                Text="{Binding UserId}"
+                                VerticalOptions="Center"
+                                LineBreakMode="TailTruncation"
+                                FontAttributes="Bold"/>
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding PartitionKey}"
+                                VerticalOptions="Center"
+                                LineBreakMode="TailTruncation"
+                                FontSize="11" />
+                            <Label
+                                Grid.Column="2"
+                                Text="{Binding Count}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center"
+                                FontAttributes="Bold" />
+                            <Label
+                                Grid.Column="3"
+                                Text="{Binding LatestTimestamp, StringFormat='{0:yyyy-MM-dd HH:mm:ss}'}"
+                                VerticalOptions="Center"
+                                FontSize="11"
+                                LineBreakMode="TailTruncation" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!--  License Load Button  -->
+        <Button
+            Grid.Row="4"
+            Text="Load License Data"
+            HorizontalOptions="Start"
+            Command="{Binding LoadLicenseDataCommand}"
+            IsEnabled="{Binding IsBusy, Converter={StaticResource Not}}"
+            Padding="15,8" />
+
+        <!--  License Table Header  -->
+        <Grid
+            Grid.Row="5"
+            ColumnDefinitions="170, *, 120, 60, 120"
+            ColumnSpacing="5"
+            Padding="10">
+            <Label
+                Text="User ID"
+                FontAttributes="Bold"
+                FontSize="12" />
+            <Label
+                Grid.Column="1"
+                Text="Account ID"
+                FontAttributes="Bold"
+                FontSize="12" />
+            <Label
+                Grid.Column="2"
+                Text="Product ID"
+                FontAttributes="Bold"
+                FontSize="12" />
+            <Label
+                Grid.Column="3"
+                Text="Count"
+                FontAttributes="Bold"
+                FontSize="12"
+                HorizontalOptions="Center" />
+            <Label
+                Grid.Column="4"
+                Text="Latest TimeUsed"
+                FontAttributes="Bold"
+                FontSize="12" />
+        </Grid>
+
+        <!--  License CollectionView  -->
+        <CollectionView
+            Grid.Row="6"
+            ItemsSource="{Binding LicenseItems}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:LicenseData">
+                    <Border
+                        Padding="10"
+                        Margin="0,5"
+                        Stroke="#e0e0e0"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8">
+                        <Grid ColumnDefinitions="170, *, 110, 60, 120" ColumnSpacing="5">
+                            <Label
+                                Text="{Binding UserId}"
+                                LineBreakMode="TailTruncation"
+                                VerticalOptions="Center"
+                                FontAttributes="Bold" />
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding ObfuscatedAccountId}"
+                                LineBreakMode="TailTruncation"
+                                VerticalOptions="Center"
+                                FontSize="11" />
+                            <Label
+                                Grid.Column="2"
+                                VerticalOptions="Center"
+                                Text="{Binding ProductId}" />
+                            <Label
+                                Grid.Column="3"
+                                Text="{Binding Count}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                FontAttributes="Bold" />
+                            <Label
+                                Grid.Column="4"
+                                Text="{Binding LatestTimeUsed, StringFormat='{0:yyyy-MM-dd HH:mm:ss}'}"
+                                VerticalOptions="Center"
+                                FontSize="11"
+                                LineBreakMode="TailTruncation" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!--  Status Message  -->
+        <Label
+            Grid.Row="7"
+            Text="{Binding StatusMessage}"
+            TextColor="{AppThemeBinding Default=LightGray,
+                                        Light=DarkGrey}"
+            HorizontalOptions="Center"
+            FontSize="12"
+            Margin="0,10,0,0" />
+
+        <!--  Busy Indicator  -->
+        <ActivityIndicator
+            Grid.RowSpan="8"
+            IsRunning="{Binding IsBusy}"
+            HeightRequest="100"
+            WidthRequest="100" />
+
+    </Grid>
+
+</ContentPage>

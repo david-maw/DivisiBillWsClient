@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DivisiBillWsClient.Views.StoredItemsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:DivisiBillWsClient"
+    xmlns:services="clr-namespace:DivisiBillWsClient.Services"
+    Title="Stored Items"
+    BindingContext="{local:MainPageViewModel}"
+    x:DataType="local:MainPageViewModel">
+
+    <Grid Padding="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto">
+        <FlexLayout Grid.Row="0" HorizontalOptions="Center" Wrap="Wrap">
+            <Picker Title="Item type" ItemsSource="{Binding ItemTypeNames}" SelectedItem="{Binding ItemTypeName}" Margin="3"/>
+            <Button Text="Refresh" Command="{Binding ListItemsCommand}" Margin="3"/>
+            <Button Text="Echo" Command="{Binding ItemUploadCommand}" IsEnabled="{Binding SelectedItem,Converter={StaticResource IsNotNull}}" Margin="3"/>
+            <Button Text="Download" Command="{Binding ItemDownloadCommand}" IsEnabled="{Binding SelectedItem,Converter={StaticResource IsNotNull}}" Margin="3"/>
+            <Button Text="Delete" Command="{Binding ItemDeleteCommand}" IsEnabled="{Binding SelectedItem,Converter={StaticResource IsNotNull}}" Margin="3"/>
+            <Button Text="Delete All" Command="{Binding ItemDeleteAllCommand}" BackgroundColor="Red" Margin="3"/>
+        </FlexLayout>
+
+        <Label Grid.Row="1" Text="{Binding SelectedItem.IsEncrypted, StringFormat='Selected item encrypted = {0}', FallbackValue='Nothing Selected'}" 
+               VerticalTextAlignment="Center" FontAttributes="Bold" Margin="0,15,0,0"/>
+
+        <VerticalStackLayout Grid.Row="2" IsVisible="{Binding SelectedItem,Converter={StaticResource IsNotNull}}" Margin="0,10,0,0">
+            <Label Text="Selected Item Description:" FontAttributes="Bold" Margin="0,8,0,0" />
+            <Editor Text="{Binding SelectedItemDescription}" IsReadOnly="True" AutoSize="TextChanges" />
+
+            <Label Text="Selected Item Data:" FontAttributes="Bold" Margin="0,8,0,0" />
+            <Entry Text="{Binding SelectedItemData}" IsReadOnly="True" />
+        </VerticalStackLayout>
+
+        <Label Grid.Row="3" Text="{Binding Items.Count, StringFormat='{0} items'}" FontAttributes="Bold" Margin="0,15,0,5" />
+
+        <Grid Grid.Row="4" ColumnDefinitions="140,120,60,60,60">
+            <Label Grid.Column="0" Text="Name" LineBreakMode="NoWrap" FontAttributes="Bold"/>
+            <Label Grid.Column="1" Text="Date" FontAttributes="Bold"/>
+            <Label Grid.Column="2" Text="Size" HorizontalOptions="End" Margin="8,0" FontAttributes="Bold"/>
+            <Label Grid.Column="3" Text="Enc" HorizontalOptions="End" Margin="8,0" FontAttributes="Bold"/>
+            <Label Grid.Column="4" Text="Image" HorizontalOptions="End" Margin="8,0" FontAttributes="Bold"/>
+        </Grid>
+
+        <CollectionView Grid.Row="5"
+                    ItemsSource="{Binding Items}"
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                    SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="140,120,60,60,60" x:DataType="services:RemoteItemInfo">
+                        <Label Grid.Column="0" Text="{Binding Name}" LineBreakMode="NoWrap" />
+                        <Label Grid.Column="1" Text="{Binding DateFromName, StringFormat='{0:yyyy-MM-dd HH:mm}'}" />
+                        <Label Grid.Column="2" Text="{Binding Size}" HorizontalOptions="End" Margin="8,0" />
+                        <Label Grid.Column="3" Text="{Binding IsEncrypted}" HorizontalOptions="End" Margin="8,0" />
+                        <Label Grid.Column="4" Text="{Binding HasRemoteImage}" HorizontalOptions="End" Margin="8,0" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Label Grid.Row="6" Text="{Binding ItemStatus}" TextColor="Gray" FontSize="12" Margin="0,10,0,0" />
+    </Grid>
+
+</ContentPage>

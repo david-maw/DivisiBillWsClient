@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DivisiBillWsClient.Views.FileActivitiesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:DivisiBillWsClient"
+    Title="File Activities"
+    BindingContext="{local:MainPageViewModel}"
+    x:DataType="local:MainPageViewModel">
+
+    <Grid Padding="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*,Auto">
+        <FlexLayout Grid.Row="0" HorizontalOptions="Center" Wrap="Wrap">
+            <Button Text="Refresh" Command="{Binding FileRefreshCommand}" Margin="3"/>
+            <Button Text="Upload..." Command="{Binding FileUploadCommand}" Margin="3"/>
+            <Button Text="Download" Command="{Binding FileDownloadCommand}" IsEnabled="{Binding FileName,Converter={StaticResource IsNotNullOrWhiteSpace}}" Margin="3"/>
+            <Button Text="Delete" Command="{Binding FileDeleteCommand}" IsEnabled="{Binding FileName,Converter={StaticResource IsNotNullOrWhiteSpace}}" Margin="3"/>
+            <Button Text="Delete All" Command="{Binding FileDeleteAllCommand}" BackgroundColor="Red" Margin="3"/>
+        </FlexLayout>
+
+        <Label Grid.Row="1" Text="Filename:" FontAttributes="Bold" Margin="0,15,0,5"/>
+        <Entry Grid.Row="2" Text="{Binding FileName}" Placeholder="filename.ext" HorizontalOptions="Fill" />
+
+        <Label Grid.Row="3" Text="{Binding Files.Count, StringFormat='{0} files'}" FontAttributes="Bold" Margin="0,0,0,0"/>
+
+        <Grid Grid.Row="4" ColumnDefinitions="170,50,165,180" ColumnSpacing="5">
+            <Label Grid.Column="0" Text="Name" LineBreakMode="NoWrap" FontAttributes="Bold"/>
+            <Label Grid.Column="1" Text="Size" HorizontalOptions="End" FontAttributes="Bold"/>
+            <Label Grid.Column="2" Text="Last Modified" HorizontalOptions="Center" FontAttributes="Bold"/>
+            <Label Grid.Column="3" Text="Content Type" FontAttributes="Bold"/>
+        </Grid>
+
+        <CollectionView Grid.Row="6"
+                    ItemsSource="{Binding Files}"
+                    SelectedItem="{Binding SelectedFile, Mode=TwoWay}"
+                    SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="170,50,165,180" ColumnSpacing="5" x:DataType="local:Services.BlobItemInformation">
+                        <Label Grid.Column="0" Text="{Binding Name}" LineBreakMode="NoWrap" />
+                        <Label Grid.Column="1" Text="{Binding Size}" HorizontalOptions="End" />
+                        <Label Grid.Column="2" Text="{Binding LastModified,Converter={StaticResource ToLocal}}" HorizontalOptions="Start" />
+                        <Label Grid.Column="3" Text="{Binding ContentType}" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Entry Grid.Row="7" Text="{Binding FileStatus}" 
+            TextColor="Gray"
+            FontSize="12" 
+            IsReadOnly="True"
+            BackgroundColor="Transparent"
+            IsTextPredictionEnabled="False"
+            IsSpellCheckEnabled="False"
+            Margin="0,10,0,0"
+        />
+    </Grid>
+</ContentPage>

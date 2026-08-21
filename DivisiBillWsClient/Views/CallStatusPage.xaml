@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DivisiBillWsClient.CallStatusPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:DivisiBillWsClient"
+    Title="Call"
+    BindingContext="{local:MainPageViewModel}"
+    x:DataType="local:MainPageViewModel">
+
+    <ScrollView HorizontalScrollBarVisibility="Always">
+        <VerticalStackLayout Padding="10" Spacing="8">
+            <Label Text="Web Service Configuration" FontAttributes="Bold" FontSize="32"/>
+
+            <VerticalStackLayout Spacing="5">
+                <Picker 
+                    ItemsSource="{Binding BaseUrlChoices}"
+                    SelectedItem="{Binding BaseUrl}"
+                    Title="Select a URL or scroll to edit"
+                    HorizontalOptions="Fill" />
+                <Label Text="Base URL:" FontAttributes="Bold" />
+                <Entry 
+                    Text="{Binding BaseUrlText}" 
+                    Completed="OnBaseUrlEntryCompleted"
+                    HorizontalOptions="Fill"
+                    Placeholder="Or type a custom URL here" />
+            </VerticalStackLayout>
+
+            <Label Text="Call Web Service" FontAttributes="Bold" FontSize="32"/>
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
+                <Button Text="Version" Command="{Binding CallVersionCommand}"/>
+                <Button Text="Status" Command="{Binding CallStatusCommand}"/>
+                <Button Text="Clear Response" Command="{Binding ClearStatusResponseCommand}" IsEnabled="{Binding StatusResponse,Converter={StaticResource IsNotNullOrWhiteSpace}}" />
+            </HorizontalStackLayout>
+
+            <Label Text="Response:" FontAttributes="Bold"/>
+            <Label Text="{Binding StatusResponse}" LineBreakMode="WordWrap"/>
+            
+            <Label Text="Cloud Authentication" FontAttributes="Bold" FontSize="32"/>
+            <Button Text="Set Password" Command="{Binding ChangePasswordCommand}"
+                    IsVisible="{Binding HasPassword,Converter={StaticResource Not}}" Margin="0,0" HorizontalOptions="Center" />
+            <Button Text="Change Password" Command="{Binding ChangePasswordCommand}"
+                    IsVisible="{Binding HasPassword}" Margin="0,0" HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
