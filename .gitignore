@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Local files, typically holding secrets
+/DivisiBillWsClient/LocalOnly/
